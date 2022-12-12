@@ -1,0 +1,200 @@
+﻿@using Syncfusion.EJ2
+@using Syncfusion.EJ2.Schedule
+
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@{
+    List<ScheduleView> viewOption = new List<ScheduleView>()
+{
+        new ScheduleView { Option = Syncfusion.EJ2.Schedule.View.TimelineMonth },
+        new ScheduleView { Option = Syncfusion.EJ2.Schedule.View.TimelineWorkWeek },
+        new ScheduleView { Option = Syncfusion.EJ2.Schedule.View.TimelineDay }
+    };
+}
+
+@(Html.EJS().Schedule("schedule")
+    .Width("100%")
+    .Height("550px")
+    .Views(viewOption)
+    .QuickInfoTemplates(qt => qt
+        .Header("#headerTemplate")
+        .Content("#contentTemplate")
+        .Footer("#footerTemplate")
+    )
+    .Group(group => group.Resources(ViewBag.Resources))
+    //.EventSettings(new ScheduleEventSettings { DataSource = ViewBag.DataSource })
+    .EventSettings(e => e
+        .DataSource(d =>
+            d.Url("/Home/GetResourceData")
+            .Adaptor("UrlAdaptor")
+            .CrossDomain(true)
+        )
+    //.Fields(f => f
+    //    .Subject(sub => sub.Name("Subject1").Title("Summary"))
+    //    .Location(loc => loc.Name("Location").Title("Location"))
+    //    .Description(des => des.Name("Description").Title("Comments"))
+    //    .StartTime(st => st.Name("StartTime").Title("From"))
+    //    .EndTime(et => et.Name("EndTime").Title("To"))
+    //)
+    )
+    .Resources(res => {
+        res.AllowMultiple(true)
+        .DataSource(d =>
+            d.Url("/Home/GetOwnerResourceData")
+            .Adaptor("UrlAdaptor")
+            .CrossDomain(true)
+        )
+        .Field("OwnerId")
+        .Title("Owner")
+        .Name("Owners")
+        .TextField("text")
+        .IdField("id")
+        .ColorField("color")
+        .Add();
+    })
+    .ActionBegin("onActionBegin")
+    //.CellClick("onCellClick")
+    //.PopupOpen("onPopupOpen")
+    //.AllowInline(true)
+    .CellDoubleClick("onCellDoubleClick")
+    .SelectedDate(DateTime.Now)
+    .Render()
+)
+
+<script>
+    function onActionBegin(e) {
+
+        console.log(e.data);
+    }
+    function onDragStop(e) {
+        console.log("onDragStop" + e);
+    }
+    function onCellDoubleClick(args) {
+        args.cancel = true;
+    }
+    function onCellClick(e) {
+        console.log(e);
+    }
+    function onPopupOpen(args) {
+        args.cancel = true;
+    }
+</script>
+
+<style>
+    .e-quick-popup-wrapper .e-popup-footer {
+        display: block;
+        padding: 41px 18px 35px 18px;
+        text-align: right;
+    }
+
+    .e-textlabel {
+        font-weight: bold;
+        padding-right: 5px;
+    }
+
+    .custom-event-editor td {
+        padding: 5px;
+    }
+
+    .e-quick-popup-wrapper .e-cell-content {
+        padding: 0 10px 10px 10px;
+    }
+
+        .e-quick-popup-wrapper .e-cell-content div {
+            padding-bottom: 10px;
+        }
+
+        .e-quick-popup-wrapper .e-cell-content .e-field {
+            border-left-width: 0;
+            border-top-width: 0;
+            border-right-width: 0;
+            height: 25px;
+            width: 100%;
+        }
+
+    .e-quick-popup-wrapper .e-event-content {
+        display: flex;
+    }
+
+        .e-quick-popup-wrapper .e-event-content img {
+            width: 100px;
+        }
+
+    .e-quick-popup-wrapper .e-event-header {
+        position: absolute;
+        right: 0;
+    }
+
+    .e-quick-popup-wrapper .e-cell-footer .e-event-create,
+    .e-quick-popup-wrapper .e-event-footer .e-event-edit {
+        position: absolute;
+        right: 0;
+    }
+
+    .e-quick-popup-wrapper .e-event-footer .e-event-delete {
+        padding-left: 100px;
+    }
+
+    .e-quick-popup-wrapper .e-event-content .subject {
+        padding-top: 30px;
+        font-weight: 500;
+        font-size: 14px;
+    }
+</style>
+
+<script id="headerTemplate" type="text/x-template">
+    <div>
+        ${if (elementType === 'cell')}
+        <div class="e-cell-header">
+            <div class="e-header-icon-wrapper">
+                <button class="e-close" title="Close"></button>
+            </div>
+        </div>
+        ${else}
+        <div class="e-event-header">
+            <div class="e-header-icon-wrapper">
+                <button class="e-close" title="CLOSE"></button>
+            </div>
+        </div>
+        ${/if}
+    </div>
+</script>
+
+<script id="contentTemplate" type="text/x-template">
+    <div>
+        <div class="e-cell-content">
+            <form class="e-schedule-form">
+                <div>
+                    <input class="subject e-field" type="text" name="Subject" placeholder="Title">
+                </div>
+                <div>
+                    <select>
+                        <option>a</option>
+                        <option>b</option>
+                        <option>c</option>
+                        <option>d</option>
+                    </select>
+                </div>
+            </form>
+        </div>
+    </div>
+</script>
+
+<script id="footerTemplate" type="text/x-template">
+    <div>
+        ${if (elementType === 'cell')}
+        <div class="e-cell-footer">
+            @*<button class="e-event-details" title="Extra Details">Extra Details</button>*@
+            <button class="e-event-create" title="Add">Add</button>
+        </div>
+        ${else}
+        <div class="e-event-footer">
+            <button class="e-event-edit" title="Edit">Edit</button>
+            <button class="e-event-delete" title="Delete">Delete</button>
+        </div>
+        ${/if}
+    </div>
+</script>
