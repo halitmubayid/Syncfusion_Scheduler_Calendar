@@ -5,10 +5,9 @@ using System.Web;
 
 namespace Syncfusion_Scheduler_Calendar.Models
 {
-    public class OwnerRes
+    public class Car
     {
-        public int id { get; set; }
-        public string text { get; set; }
-        public string color { get; set; }
+        public int Id { get; set; }
+        public string Name { get; set; }
     }
 }

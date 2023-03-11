@@ -6,195 +6,74 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-@{
-    List<ScheduleView> viewOption = new List<ScheduleView>()
-{
-        new ScheduleView { Option = Syncfusion.EJ2.Schedule.View.TimelineMonth },
-        new ScheduleView { Option = Syncfusion.EJ2.Schedule.View.TimelineWorkWeek },
-        new ScheduleView { Option = Syncfusion.EJ2.Schedule.View.TimelineDay }
-    };
-}
-
+<h2>Index</h2>
 @(Html.EJS().Schedule("schedule")
-    .Width("100%")
-    .Height("550px")
-    .Views(viewOption)
-    .QuickInfoTemplates(qt => qt
-        .Header("#headerTemplate")
-        .Content("#contentTemplate")
-        .Footer("#footerTemplate")
-    )
-    .Group(group => group.Resources(ViewBag.Resources))
-    //.EventSettings(new ScheduleEventSettings { DataSource = ViewBag.DataSource })
-    .EventSettings(e => e
-        .DataSource(d =>
-            d.Url("/Home/GetResourceData")
-            .Adaptor("UrlAdaptor")
-            .CrossDomain(true)
-        )
-    //.Fields(f => f
-    //    .Subject(sub => sub.Name("Subject1").Title("Summary"))
-    //    .Location(loc => loc.Name("Location").Title("Location"))
-    //    .Description(des => des.Name("Description").Title("Comments"))
-    //    .StartTime(st => st.Name("StartTime").Title("From"))
-    //    .EndTime(et => et.Name("EndTime").Title("To"))
-    //)
-    )
-    .Resources(res => {
-        res.AllowMultiple(true)
-        .DataSource(d =>
-            d.Url("/Home/GetOwnerResourceData")
-            .Adaptor("UrlAdaptor")
-            .CrossDomain(true)
-        )
-        .Field("OwnerId")
-        .Title("Owner")
-        .Name("Owners")
-        .TextField("text")
-        .IdField("id")
-        .ColorField("color")
-        .Add();
-    })
-    .ActionBegin("onActionBegin")
-    //.CellClick("onCellClick")
-    //.PopupOpen("onPopupOpen")
-    //.AllowInline(true)
-    .CellDoubleClick("onCellDoubleClick")
-    .SelectedDate(DateTime.Now)
-    .Render()
+        .Width("100%")
+        .Height("700px")
+        .DateFormat("dd/MM/yyyy")
+        .CurrentView(View.TimelineMonth).Views(view =>
+        {
+            view.Option(View.TimelineMonth).EventTemplate("#timeline-event-template").Add();
+        })
+        .Group(group => group.Resources(ViewBag.Resources))
+        .EventSettings(new ScheduleEventSettings { DataSource = ViewBag.DataSource })
+        .Resources(res =>
+        {
+            res.AllowMultiple(true)
+            .DataSource(ViewBag.Cars)
+            .Field("CarId")
+            .Title("Car")
+            .Name("Cars")
+            .TextField("Name")
+            .IdField("Id")
+            .ColorField("Color")
+            .Add();
+        })
+        .WorkDays(new int[] { 0, 1, 2, 3, 4 })
+        .FirstDayOfWeek(0)
+        .SelectedDate(ViewBag.StartDateTime)
+        .MinDate(ViewBag.StartDateTime)
+        .MaxDate(ViewBag.EndDateTime)
+        .DateHeaderTemplate("#DateHeaderTemplate")
+        .CssClass("schedule-cell-CostDimension")
+        .Render()
 )
 
+<script id="DateHeaderTemplate" type="text/template">
+    <div class="date-text">${getDateHeaderText(data.date)}</div>
+</script>
+
 <script>
-    function onActionBegin(e) {
-
-        console.log(e.data);
-    }
-    function onDragStop(e) {
-        console.log("onDragStop" + e);
-    }
-    function onCellDoubleClick(args) {
-        args.cancel = true;
-    }
-    function onCellClick(e) {
-        console.log(e);
-    }
-    function onPopupOpen(args) {
-        args.cancel = true;
+    function getDateHeaderText(date) {
+        return instance.formatDate(date, { skeleton: 'Ed' });
     }
 </script>
 
-<style>
-    .e-quick-popup-wrapper .e-popup-footer {
-        display: block;
-        padding: 41px 18px 35px 18px;
-        text-align: right;
+<script type="text/javascript">
+    var instance = new ej.base.Internationalization();
+    function getCellHeaderContent(date) {
+        //console.log(date);
+        return instance.formatDate(date, { skeleton: "Ed" });
     }
-
-    .e-textlabel {
-        font-weight: bold;
-        padding-right: 5px;
-    }
-
-    .custom-event-editor td {
-        padding: 5px;
-    }
-
-    .e-quick-popup-wrapper .e-cell-content {
-        padding: 0 10px 10px 10px;
-    }
-
-        .e-quick-popup-wrapper .e-cell-content div {
-            padding-bottom: 10px;
-        }
-
-        .e-quick-popup-wrapper .e-cell-content .e-field {
-            border-left-width: 0;
-            border-top-width: 0;
-            border-right-width: 0;
-            height: 25px;
-            width: 100%;
-        }
-
-    .e-quick-popup-wrapper .e-event-content {
-        display: flex;
-    }
-
-        .e-quick-popup-wrapper .e-event-content img {
-            width: 100px;
-        }
-
-    .e-quick-popup-wrapper .e-event-header {
-        position: absolute;
-        right: 0;
-    }
-
-    .e-quick-popup-wrapper .e-cell-footer .e-event-create,
-    .e-quick-popup-wrapper .e-event-footer .e-event-edit {
-        position: absolute;
-        right: 0;
-    }
-
-    .e-quick-popup-wrapper .e-event-footer .e-event-delete {
-        padding-left: 100px;
-    }
-
-    .e-quick-popup-wrapper .e-event-content .subject {
-        padding-top: 30px;
-        font-weight: 500;
-        font-size: 14px;
-    }
-</style>
-
-<script id="headerTemplate" type="text/x-template">
-    <div>
-        ${if (elementType === 'cell')}
-        <div class="e-cell-header">
-            <div class="e-header-icon-wrapper">
-                <button class="e-close" title="Close"></button>
-            </div>
-        </div>
-        ${else}
-        <div class="e-event-header">
-            <div class="e-header-icon-wrapper">
-                <button class="e-close" title="CLOSE"></button>
-            </div>
-        </div>
-        ${/if}
-    </div>
 </script>
 
-<script id="contentTemplate" type="text/x-template">
-    <div>
-        <div class="e-cell-content">
-            <form class="e-schedule-form">
-                <div>
-                    <input class="subject e-field" type="text" name="Subject" placeholder="Title">
-                </div>
-                <div>
-                    <select>
-                        <option>a</option>
-                        <option>b</option>
-                        <option>c</option>
-                        <option>d</option>
-                    </select>
-                </div>
-            </form>
-        </div>
-    </div>
+<script id="timeline-event-template" type="text/x-template">
+    ${getEventContent(data)}
 </script>
 
-<script id="footerTemplate" type="text/x-template">
-    <div>
-        ${if (elementType === 'cell')}
-        <div class="e-cell-footer">
-            @*<button class="e-event-details" title="Extra Details">Extra Details</button>*@
-            <button class="e-event-create" title="Add">Add</button>
-        </div>
-        ${else}
-        <div class="e-event-footer">
-            <button class="e-event-edit" title="Edit">Edit</button>
-            <button class="e-event-delete" title="Delete">Delete</button>
-        </div>
-        ${/if}
-    </div>
+<script>
+    function getEventContent(data) {
+        debugger
+        var content = "";
+
+        if (data.StartTime.getDay() == 5 || data.StartTime.getDay() == 6) content = content + "<div class='template-wrap' style='background-color: rgb(241, 156, 187);'>";
+        else if (data.Id != 0) content = content + "<div class='template-wrap' style='background-color: rgb(113, 106, 202);'>";
+        else if (data.Id == 0) content = content + "<div class='template-wrap' style='background-color: rgba(177, 173, 230,0.8);color: #111;'>";
+
+        return content + "<div class='subject'>" + data.Subject + " / " + data.CostCenter + "</div></div>";
+    }
+    /*function getEventContent(data) {
+        debugger
+        return "<div class='subject' style='font-size: 16px;'>" + data.Subject + "</div>";
+    }*/
 </script>

@@ -1,4 +1,5 @@
-﻿using Syncfusion_Scheduler_Calendar.Models;
+﻿using Syncfusion.EJ2.Schedule;
+using Syncfusion_Scheduler_Calendar.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,55 +10,106 @@ namespace Syncfusion_Scheduler_Calendar.Controllers
 {
     public class HomeController : Controller
     {
-        public ActionResult Index()
+         public ActionResult Index()
         {
-            ViewBag.Resources = new string[] { "Owners" };
-            //ViewBag.DataSource = GetResourceData();
+            ViewBag.Resources = new string[] { "Cars" };
+            ViewBag.Cars = getCarDTOs();
+            ViewBag.DataSource = getCarLoadChartDTOs();
+
+            DateTime StartDateTime = new DateTime(DateTime.Now.Year, DateTime.Now.Month, 01);
+            DateTime EndDateTime = new DateTime(StartDateTime.Year, StartDateTime.Month, StartDateTime.AddMonths(1).AddDays(-1).Day);
+
             return View();
         }
 
-        public JsonResult GetOwnerResourceData()
+        private List<Car> getCarDTOs()
         {
-            return Json(new List<OwnerRes>
+            return new List<Car>
             {
-                new OwnerRes { text = "Nancy", id = 1, color = "#ffaa00" },
-                new OwnerRes { text = "Steven", id = 2, color = "#f8a398" },
-                new OwnerRes { text = "Michael", id = 3, color = "#7499e1" },
-            });
+                new Car
+                {
+                    Id = 101,
+                    Name = "c101"
+                },
+                new Car
+                {
+                    Id = 102,
+                    Name = "c102"
+                },
+                new Car
+                {
+                    Id = 103,
+                    Name = "c103"
+                },
+                new Car
+                {
+                    Id = 104,
+                    Name = "c104"
+                },
+                new Car
+                {
+                    Id = 105,
+                    Name = "c105"
+                }
+            };
         }
 
-        public JsonResult GetResourceData()
+        private List<CarLoadChart> getCarLoadChartDTOs()
         {
-            return Json(new List<ResourceData>
+            return new List<CarLoadChart>
             {
-                new ResourceData
+                new CarLoadChart
                 {
-                    Id = 1,
-                    Subject = "Workflow Analysis",
-                    StartTime = new DateTime(2022, 12, 3, 10, 0, 0),
-                    EndTime = new DateTime(2022, 12, 3, 13, 0, 0),
-                    IsAllDay = false,
-                    OwnerId = 1
+                    Id = 201,
+                    CarId = 101,
+                    CostCenter = "c101",
+                    Subject = "sc101",
+                    StartTime = new DateTime(2023, 3, 1, 0, 0, 0),
+                    EndTime = new DateTime(2023, 3, 1, 0, 0, 0),
+                    MyGuid = Guid.NewGuid().ToString(),
                 },
-                new ResourceData
+                new CarLoadChart
                 {
-                    Id = 2,
-                    Subject = "Requirement planning",
-                    StartTime = new DateTime(2022, 12, 4, 10, 0, 0),
-                    EndTime = new DateTime(2022, 12, 4, 13, 0, 0),
-                    IsAllDay = false,
-                    OwnerId = 2
+                    Id = 202,
+                    CarId = 102,
+                    CostCenter = "c102",
+                    Subject = "sc102",
+                    StartTime = new DateTime(2023, 3, 2, 0, 0, 0),
+                    EndTime = new DateTime(2023, 3, 2, 0, 0, 0),
+                    MyGuid = Guid.NewGuid().ToString(),
                 },
-                new ResourceData
+                new CarLoadChart
                 {
-                    Id = 3,
-                    Subject = "Quality Analysis",
-                    StartTime = new DateTime(2022, 12, 5, 10, 0, 0),
-                    EndTime = new DateTime(2022, 12, 5, 13, 0, 0),
-                    IsAllDay = false,
-                    OwnerId = 3
+                    Id = 203,
+                    CarId = 103,
+                    CostCenter = "c103",
+                    Subject = "sc103",
+                    StartTime = new DateTime(2023, 3, 3, 0, 0, 0),
+                    EndTime = new DateTime(2023, 3, 3, 0, 0, 0),
+                    MyGuid = Guid.NewGuid().ToString(),
+                },
+                new CarLoadChart
+                {
+                    Id = 204,
+                    CarId = 104,
+                    CostCenter = "c104",
+                    Subject = "sc104",
+                    StartTime = new DateTime(2023, 3, 4, 0, 0, 0),
+                    EndTime = new DateTime(2023, 3, 4, 0, 0, 0),
+                    MyGuid = Guid.NewGuid().ToString(),
+                },
+                new CarLoadChart
+                {
+                    Id = 205,
+                    CarId = 105,
+                    CostCenter = "c105",
+                    Subject = "sc105",
+                    StartTime = new DateTime(2023, 3, 5, 0, 0, 0),
+                    EndTime = new DateTime(2023, 3, 5, 0, 0, 0),
+                    MyGuid = Guid.NewGuid().ToString(),
                 }
-            });
+            };
         }
+
     }
 }

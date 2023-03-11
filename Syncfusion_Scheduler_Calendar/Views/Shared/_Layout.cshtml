@@ -7,6 +7,141 @@
 
     <link rel="stylesheet" href="https://cdn.syncfusion.com/ej2/20.1.47/fluent.css" />
     <script src="https://cdn.syncfusion.com/ej2/20.1.47/dist/ej2.min.js"></script>
+
+    <style>
+        .e-resource-left-td, .e-resource-column-table {
+            width: 150px !important;
+        }
+
+        .e-schedule .e-timeline-view .e-child-node, .e-schedule .e-timeline-month-view .e-child-node {
+            height: 160px;
+            white-space: initial;
+            width: 75px;
+        }
+
+        .quick-info-title {
+            margin: 15px;
+            font-size: 16px;
+            padding-bottom: 5px;
+            border-bottom: 1px solid #ccc !important;
+        }
+
+        .schedule-cell-CostDimension.e-schedule .e-vertical-view .e-date-header-wrap table col,
+        .schedule-cell-CostDimension.e-schedule .e-vertical-view .e-content-wrap table col {
+            width: 100px;
+        }
+
+        .schedule-cell-CostDimension.e-schedule .e-vertical-view .e-time-cells-wrap table td,
+        .schedule-cell-CostDimension.e-schedule .e-vertical-view .e-work-cells {
+            height: 160px;
+        }
+
+        .schedule-cell-CostDimension.e-schedule .e-month-view .e-work-cells,
+        .schedule-cell-CostDimension.e-schedule .e-month-view .e-date-header-wrap table col {
+            width: 100px;
+        }
+
+        .schedule-cell-CostDimension.e-schedule .e-month-view .e-work-cells {
+            height: 160px;
+        }
+
+        .schedule-cell-CostDimension.e-schedule .e-timeline-month-view .e-content-wrap table col,
+        .schedule-cell-CostDimension.e-schedule .e-timeline-view .e-content-wrap table col {
+            width: 100px;
+        }
+
+        .e-schedule .e-timeline-view .e-work-days, .e-schedule .e-timeline-month-view .e-work-days {
+            background-color: #fff !important;
+        }
+
+        .schedule-cell-CostDimension.e-schedule .e-timeline-view .e-work-cells,
+        .schedule-cell-CostDimension.e-schedule .e-timeline-month-view .e-work-cells {
+            height: 160px;
+            background-color: #fff;
+        }
+
+        .e-schedule .e-timeline-month-view .e-appointment {
+            background: none;
+            border-radius: 15px;
+            color: #fff;
+            cursor: default;
+            display: -ms-flexbox;
+            display: flex;
+            height: auto;
+            overflow: hidden;
+            position: absolute;
+        }
+
+            .e-schedule .e-timeline-month-view .e-appointment .e-appointment-details {
+                padding: 0 0px;
+            }
+
+        .e-schedule .e-vertical-view .e-content-wrap .e-appointment,
+        .e-schedule .e-timeline-view .e-content-wrap .e-appointment {
+            border-radius: 8px;
+        }
+
+            .e-schedule .e-vertical-view .e-content-wrap .e-appointment .e-appointment-details {
+                padding: 0;
+                height: 100%;
+                width: 100%;
+            }
+
+
+        .e-schedule .template-wrap {
+            height: 100%;
+            white-space: normal;
+        }
+
+            .e-schedule .template-wrap .subject {
+                font-weight: 600;
+                font-size: 12px;
+                padding: 4px 0px 4px 0px;
+                text-align: center;
+                width: 100px;
+            }
+
+            .e-schedule .template-wrap .time {
+                height: 50px;
+            }
+
+            .e-schedule .template-wrap .time,
+            .e-schedule .template-wrap .description {
+                font-size: 12px;
+                padding: 4px 6px 4px;
+                overflow: hidden;
+            }
+
+        @@media only screen and (max-width: 360px) {
+            .e-schedule .e-vertical-view .e-content-wrap .e-appointment {
+                border-radius: 2px;
+            }
+
+            .e-schedule .template-wrap .image img {
+                height: 50px;
+            }
+
+            .e-schedule .template-wrap .tags {
+                display: none;
+            }
+        }
+
+        .e-schedule .e-timeline-view .e-appointment .e-appointment-details {
+            padding: 0;
+            height: 100%;
+            width: 100%;
+        }
+
+        .e-schedule .e-timeline-view .template-wrap {
+            width: 100%;
+        }
+
+            .e-schedule .e-timeline-view .template-wrap .subject {
+                font-size: 16px;
+                height: 36px;
+                text-align: center;
+            }
+    </style>
 </head>
 <body>
     <div class="container body-content">

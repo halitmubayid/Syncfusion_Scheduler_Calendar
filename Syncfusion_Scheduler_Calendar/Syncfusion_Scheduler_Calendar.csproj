@@ -130,8 +130,8 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
-    <Compile Include="Models\ResourceData.cs" />
-    <Compile Include="Models\OwnerRes.cs" />
+    <Compile Include="Models\CarLoadChart.cs" />
+    <Compile Include="Models\Car.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
