@@ -13,8 +13,14 @@ namespace Syncfusion_Scheduler_Calendar.Controllers
          public ActionResult Index()
         {
             ViewBag.Resources = new string[] { "Cars" };
-            ViewBag.Cars = getCarDTOs();
-            ViewBag.DataSource = getCarLoadChartDTOs();
+            ViewBag.Cars = getCars();
+            ViewBag.DataSource = getCarLoadCharts();
+            ViewBag.DataSource = getCarLoadCharts();
+            ViewBag.V_CostCenter = new SelectList(getCostCenters().Select(x => new
+            {
+                Id = x.Id,
+                Name = x.Name,
+            }), "Id", "Name");
 
             DateTime StartDateTime = new DateTime(DateTime.Now.Year, DateTime.Now.Month, 01);
             DateTime EndDateTime = new DateTime(StartDateTime.Year, StartDateTime.Month, StartDateTime.AddMonths(1).AddDays(-1).Day);
@@ -22,7 +28,52 @@ namespace Syncfusion_Scheduler_Calendar.Controllers
             return View();
         }
 
-        private List<Car> getCarDTOs()
+        [HttpPost]
+        public ActionResult LoadChartSave(CarLoadChart carLoadChart)
+        {
+            return Json(carLoadChart);
+        }
+
+        public ActionResult Delete()
+        {
+            ViewBag.datasource = GetScheduleData();
+            
+            List<ScheduleView> viewOption = new List<ScheduleView>()
+            {
+                new ScheduleView { Option = Syncfusion.EJ2.Schedule.View.Day },
+                new ScheduleView { Option = Syncfusion.EJ2.Schedule.View.Week },
+                new ScheduleView { Option = Syncfusion.EJ2.Schedule.View.WorkWeek }
+            };
+
+            ViewBag.view = viewOption;
+
+            return View();
+        }
+
+        public List<AppointmentData> GetScheduleData()
+        {
+            List<AppointmentData> appData = new List<AppointmentData>();
+            appData.Add(new AppointmentData
+            {
+                Id = 1,
+                Subject = "Meeting",
+                StartTime = new DateTime(2023, 2, 15, 10, 0, 0),
+                EndTime = new DateTime(2023, 2, 15, 12, 30, 0),
+                IsAllDay = false,
+            });
+            return appData;
+        }
+
+        public class AppointmentData
+        {
+            public int Id { get; set; }
+            public string Subject { get; set; }
+            public DateTime StartTime { get; set; }
+            public DateTime EndTime { get; set; }
+            public bool IsAllDay { get; set; }
+        }
+
+        private List<Car> getCars()
         {
             return new List<Car>
             {
@@ -54,7 +105,7 @@ namespace Syncfusion_Scheduler_Calendar.Controllers
             };
         }
 
-        private List<CarLoadChart> getCarLoadChartDTOs()
+        private List<CarLoadChart> getCarLoadCharts()
         {
             return new List<CarLoadChart>
             {
@@ -107,6 +158,38 @@ namespace Syncfusion_Scheduler_Calendar.Controllers
                     StartTime = new DateTime(2023, 3, 5, 0, 0, 0),
                     EndTime = new DateTime(2023, 3, 5, 0, 0, 0),
                     MyGuid = Guid.NewGuid().ToString(),
+                }
+            };
+        }
+
+        private List<CostCenter> getCostCenters()
+        {
+            return new List<CostCenter>
+            {
+                new CostCenter
+                {
+                    Id = 301,
+                    Name = "CC-1"
+                },
+                new CostCenter
+                {
+                    Id = 302,
+                    Name = "CC-2"
+                },
+                new CostCenter
+                {
+                    Id = 303,
+                    Name = "CC-3"
+                },
+                new CostCenter
+                {
+                    Id = 304,
+                    Name = "CC-4"
+                },
+                new CostCenter
+                {
+                    Id = 305,
+                    Name = "CC-5"
                 }
             };
         }

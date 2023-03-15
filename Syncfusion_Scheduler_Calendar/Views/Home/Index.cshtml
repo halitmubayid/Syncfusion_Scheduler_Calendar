@@ -1,5 +1,6 @@
 ﻿@using Syncfusion.EJ2
 @using Syncfusion.EJ2.Schedule
+@model Syncfusion_Scheduler_Calendar.Models.CarLoadChart
 
 @{
     ViewBag.Title = "Index";
@@ -13,10 +14,13 @@
         .DateFormat("dd/MM/yyyy")
         .CurrentView(View.TimelineMonth).Views(view =>
         {
-            view.Option(View.TimelineMonth).EventTemplate("#timeline-event-template").Add();
+            view.Option(View.TimelineMonth)
+            .EventTemplate("#timeline-event-template")
+            .Add();
         })
         .Group(group => group.Resources(ViewBag.Resources))
         .EventSettings(new ScheduleEventSettings { DataSource = ViewBag.DataSource })
+        .EditorTemplate("#EventEditorTemplate")
         .Resources(res =>
         {
             res.AllowMultiple(true)
@@ -36,6 +40,9 @@
         .MaxDate(ViewBag.EndDateTime)
         .DateHeaderTemplate("#DateHeaderTemplate")
         .CssClass("schedule-cell-CostDimension")
+        //.ActionBegin("onActionBegin")
+        .EventRendered("onEventRendered")
+        .ShowQuickInfo(false)
         .Render()
 )
 
@@ -61,6 +68,23 @@
     ${getEventContent(data)}
 </script>
 
+<script id="EventEditorTemplate" type="text/x-template">
+    <div id="dddd">
+        <div class="e-cell-content">
+            <div class="quick-info-title"></div>
+            <div class="m-portlet__body">
+                <div class="form-group m-form__group row">
+                    <div class="col-lg-12 mt-4">
+                        <label>Cost Center</label>
+
+                        @Html.DropDownListFor(model => model.CostCenterId, (SelectList)ViewBag.V_CostCenter, new { @class = "form-control  m-input select2 mt-2 CostCenter_Id", @placeholder = "" })
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</script>
+
 <script>
     function getEventContent(data) {
         debugger
@@ -77,3 +101,87 @@
         return "<div class='subject' style='font-size: 16px;'>" + data.Subject + "</div>";
     }*/
 </script>
+
+<script>
+    function onActionBegin(e) {
+        debugger
+        if (e.data) {
+            console.log(e.data);
+
+            var formData = new FormData();
+
+            formData.append("Id", e.data[0].Id);
+            //formData.append("CostCenterID", CostCenterID);
+            //formData.append("CostCenter", CostCenter);
+            formData.append("StartTime", new Date(e.data[0].StartTime.getTime() + (3600000 * 5)).toISOString());
+            formData.append("EndTime", new Date(e.data[0].EndTime.getTime() + (3600000 * 5)).toISOString());
+            formData.append("IsAllDay", true);
+            //formData.append("MyGuid", e.data[0].MyGuid);
+            formData.append("CarId", e.data[0].CarId);
+
+            $.ajax({
+                type: "POST",
+                url: "/home/LoadChartSave",
+                processData: false,
+                contentType: false,
+                dataType: "json",
+                data: formData,
+                success: function (data) {
+                    console.log(data);
+                },
+                error: function () {
+                    console.log(data);
+                }
+            });
+        }
+    }
+
+    function onEventRendered(args) {
+        debugger
+        console.log(args);
+    }
+
+    function onCellClick(args) {
+        args.cancel = true;
+    }
+
+    function onCellDoubleClick(args) {
+        args.cancel = true;
+    }
+
+    function onEventRendered(args) {
+        args.cancel = true;
+    }
+
+    function onEventClick(args) {
+        args.cancel = true;
+    }
+
+    function onPopupOpen(e) {
+        DataOBJ = e.data;
+
+        $(".CostCenter_Id").change(function () {
+            CostCenterID = $(this).val();
+            CostCenter = $(this).find(":selected").text();
+        });
+
+        $("select.select2").select2({
+            placeholder: SelectChoose, allowClear: !0
+        });
+
+        $('.CostCenter_Id').val(DataOBJ.CostCenterId).trigger('change');
+
+    }
+</script>
+
+@*@(Html.EJS().Schedule("schedule").
+        Width("100%")
+        .Height("650px")
+        .Views(ViewBag.view)
+        .ActionBegin("onActionBegin")
+        .EventRendered("onEventRendered")
+        .PopupOpen("onPopupOpen")
+        .EventSettings(new ScheduleEventSettings { DataSource = ViewBag.datasource })
+        .EditorTemplate("#EventEditorTemplate")
+        .ShowQuickInfo(false)
+        .SelectedDate(new DateTime(DateTime.Today.Year, 2, 15)).Render())*@

@@ -9,6 +9,7 @@ namespace Syncfusion_Scheduler_Calendar.Models
     {
         public long Id { get; set; }
         public int CarId { get; set; }
+        public int CostCenterId { get; set; }
         public string CostCenter { get; set; }
         public string Subject { get; set; }
         public DateTime StartTime { get; set; }

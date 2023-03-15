@@ -132,6 +132,7 @@
     </Compile>
     <Compile Include="Models\CarLoadChart.cs" />
     <Compile Include="Models\Car.cs" />
+    <Compile Include="Models\CostCenter.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -145,6 +146,7 @@
     <Content Include="Views\Shared\_Layout.cshtml" />
     <Content Include="tsconfig.json" />
     <Content Include="Views\Home\Index.cshtml" />
+    <Content Include="Views\Home\Delete.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
